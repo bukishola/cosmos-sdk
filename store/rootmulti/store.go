@@ -992,6 +992,60 @@ func (rs *Store) buildCommitInfo(version int64) *types.CommitInfo {
 	}
 }
 
+// DeleteKVStore finds a store with the give key name and deletes it.
+// This is a destructive operation to be used with caution.
+// The reason it was added was to allow for rollbacks of upgrades that add modules.
+// Stores that do not exist in the version prior to upgrade can be forcible deleted
+// before calling Rollback()
+func (rs *Store) DeleteKVStore(keyName string) error {
+	ver := GetLatestVersion(rs.db)
+	if ver == 0 {
+		return fmt.Errorf("unable to delete KVStore for version 0")
+	}
+
+	// get key with that name
+	var key types.StoreKey = nil
+	for k := range rs.storesParams {
+		if k.Name() == keyName {
+			key = k
+			break
+		}
+	}
+	if key == nil {
+		return fmt.Errorf("no store found with key name %s", keyName)
+	}
+
+	// get store for that key
+	cInfo := &types.CommitInfo{}
+	var err error
+	cInfo, err = rs.GetCommitInfo(ver)
+	if err != nil {
+		return err
+	}
+	infos := make(map[string]types.StoreInfo)
+	for _, storeInfo := range cInfo.StoreInfos {
+		infos[storeInfo.Name] = storeInfo
+	}
+	commitID := rs.getCommitID(infos, key.Name())
+	store, err := rs.loadCommitStoreFromParams(key, commitID, rs.storesParams[key])
+	if err != nil {
+		return errors.Wrap(err, "failed to load store")
+	}
+
+	// delete the store & remove from all tracking
+	if err := deleteKVStore(types.KVStore(store)); err != nil {
+		return errors.Wrapf(err, "failed to delete store %s", key.Name())
+	}
+
+	if _, ok := rs.stores[key]; ok {
+		delete(rs.stores, key)
+		delete(rs.storesParams, key)
+		delete(rs.keysByName, key.Name())
+	}
+
+	return nil
+}
+
 // RollbackToVersion delete the versions after `target` and update the latest version.
 func (rs *Store) RollbackToVersion(target int64) error {
 	if target <= 0 {
@@ -1003,9 +1057,10 @@ func (rs *Store) RollbackToVersion(target int64) error {
 			// If the store is wrapped with an inter-block cache, we must first unwrap
 			// it to get the underlying IAVL store.
 			store = rs.GetCommitKVStore(key)
+			rs.logger.Debug("loading version %d for store with key %s (%s)\n", target, key.String(), key.Name())
 			_, err := store.(*iavl.Store).LoadVersionForOverwriting(target)
 			if err != nil {
-				return err
+				return errors.Wrapf(err, "failed loading version %d for store with key name '%s'", target, key.Name())
 			}
 		}
 	}
