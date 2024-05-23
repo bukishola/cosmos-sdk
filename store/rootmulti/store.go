@@ -1032,6 +1032,8 @@ func (rs *Store) DeleteKVStore(keyName string) error {
 		return errors.Wrap(err, "failed to load store")
 	}
 
+	rs.logger.Info("deleting KVStore", "key", key.Name(), "latest version", ver)
+
 	// delete the store & remove from all tracking
 	if err := deleteKVStore(types.KVStore(store)); err != nil {
 		return errors.Wrapf(err, "failed to delete store %s", key.Name())
@@ -1041,6 +1043,15 @@ func (rs *Store) DeleteKVStore(keyName string) error {
 		delete(rs.stores, key)
 		delete(rs.storesParams, key)
 		delete(rs.keysByName, key.Name())
+	}
+
+	// delete the versions from disk if it's an IAVL store
+	if store.GetStoreType() == types.StoreTypeIAVL {
+		store = rs.GetCommitKVStore(key)
+		// TODO: DeleteVersionsTo?
+		if err := store.(*iavl.Store).DeleteVersionsFrom(ver); err != nil {
+			return errors.Wrapf(err, "failed to delete versions %d onwards of %s store", ver, key.Name())
+		}
 	}
 
 	return nil
