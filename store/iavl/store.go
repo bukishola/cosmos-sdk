@@ -229,7 +229,7 @@ func (st *Store) DeleteVersionsTo(version int64) error {
 	return st.tree.DeleteVersionsTo(version)
 }
 
-// DeleteVersionsFrom deletes from the given version upwards
+// DeleteVersionsFrom deletes from the given version upwards form the MutableTree.
 func (st *Store) DeleteVersionsFrom(version int64) error {
 	return st.tree.DeleteVersionsFrom(version)
 }

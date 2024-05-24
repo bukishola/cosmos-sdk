@@ -46,8 +46,8 @@ application.
 			// otherwise, the rollback will panic because no version of new modules will exist.
 			store := app.CommitMultiStore().(*rootmulti.Store)
 			for _, key := range moduleKeysToDelete {
-				fmt.Printf("deleting KVStore with key %s\n", key)
-				if err := store.DeleteKVStore(key); err != nil {
+				fmt.Printf("deleting latest version of KVStore with key %s\n", key)
+				if err := store.DeleteLatestVersion(key); err != nil {
 					return err
 				}
 			}

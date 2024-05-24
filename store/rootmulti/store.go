@@ -992,18 +992,20 @@ func (rs *Store) buildCommitInfo(version int64) *types.CommitInfo {
 	}
 }
 
-// DeleteKVStore finds a store with the give key name and deletes it.
+// DeleteLatestVersion finds a store with the given key name and deletes its latest version.
+// The store is deregistered from the rootmulti store. Calls to buildCommitInfo will not include it.
+// For stores with IAVL types, the deletion is written to the disk.
 // This is a destructive operation to be used with caution.
 // The reason it was added was to allow for rollbacks of upgrades that add modules.
-// Stores that do not exist in the version prior to upgrade can be forcible deleted
+// Stores that do not exist in the version prior to upgrade can be forcibly deleted
 // before calling Rollback()
-func (rs *Store) DeleteKVStore(keyName string) error {
+func (rs *Store) DeleteLatestVersion(keyName string) error {
 	ver := GetLatestVersion(rs.db)
 	if ver == 0 {
-		return fmt.Errorf("unable to delete KVStore for version 0")
+		return fmt.Errorf("unable to delete KVStore with key name %s, latest version is 0", keyName)
 	}
 
-	// get key with that name
+	// Find the store key with the provided name
 	var key types.StoreKey = nil
 	for k := range rs.storesParams {
 		if k.Name() == keyName {
@@ -1015,7 +1017,7 @@ func (rs *Store) DeleteKVStore(keyName string) error {
 		return fmt.Errorf("no store found with key name %s", keyName)
 	}
 
-	// get store for that key
+	// Get the KVStore for that key
 	cInfo := &types.CommitInfo{}
 	var err error
 	cInfo, err = rs.GetCommitInfo(ver)
@@ -1032,9 +1034,10 @@ func (rs *Store) DeleteKVStore(keyName string) error {
 		return errors.Wrap(err, "failed to load store")
 	}
 
-	rs.logger.Info("deleting KVStore", "key", key.Name(), "latest version", ver)
+	rs.logger.Debug("deleting KVStore", "key", key.Name(), "latest version", ver)
 
-	// delete the store & remove from all tracking
+	// Delete & deregister store from rootmulti store
+	// Any future buildCommitInfo will no longer include the store.
 	if err := deleteKVStore(types.KVStore(store)); err != nil {
 		return errors.Wrapf(err, "failed to delete store %s", key.Name())
 	}
@@ -1045,10 +1048,9 @@ func (rs *Store) DeleteKVStore(keyName string) error {
 		delete(rs.keysByName, key.Name())
 	}
 
-	// delete the versions from disk if it's an IAVL store
+	// for IAVL stores, commit the deletion of the latest version to disk.
 	if store.GetStoreType() == types.StoreTypeIAVL {
 		store = rs.GetCommitKVStore(key)
-		// TODO: DeleteVersionsTo?
 		if err := store.(*iavl.Store).DeleteVersionsFrom(ver); err != nil {
 			return errors.Wrapf(err, "failed to delete versions %d onwards of %s store", ver, key.Name())
 		}
