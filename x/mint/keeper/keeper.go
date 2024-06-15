@@ -88,6 +88,19 @@ func (k Keeper) StakingTokenSupply(ctx sdk.Context) math.Int {
 	return k.stakingKeeper.StakingTokenSupply(ctx)
 }
 
+func (k Keeper) StakingTokenCirculatingSupply(ctx sdk.Context) math.Int {
+	return k.stakingKeeper.StakingTokenCirculatingSupply(ctx)
+}
+
+func (k Keeper) CirculatingRatio(ctx sdk.Context) sdk.Dec {
+	num := k.stakingKeeper.StakingTokenCirculatingSupply(ctx)
+	den := k.stakingKeeper.StakingTokenSupply(ctx)
+	if num.IsPositive() {
+		return sdk.NewDecFromInt(num).QuoInt(den)
+	}
+	return sdk.ZeroDec()
+}
+
 // BondedRatio implements an alias call to the underlying staking keeper's
 // BondedRatio to be used in BeginBlocker.
 func (k Keeper) BondedRatio(ctx sdk.Context) sdk.Dec {
