@@ -74,8 +74,8 @@ func (k Keeper) StakingTokenCirculatingSupply(ctx sdk.Context) math.Int {
 
 	totalLocked := math.ZeroInt()
 	k.authKeeper.IterateAccounts(ctx, func(acc authtypes.AccountI) bool {
-		if va, ok := acc.(vestexported.VestingAccount); ok {
-			vestingCoins := va.GetVestingCoins(ctx.BlockTime())
+		if vestingAcc, ok := acc.(vestexported.VestingAccount); ok {
+			vestingCoins := vestingAcc.GetVestingCoins(ctx.BlockTime())
 			for _, coin := range vestingCoins {
 				if coin.Denom == k.BondDenom(ctx) {
 					totalLocked = totalLocked.Add(coin.Amount)
