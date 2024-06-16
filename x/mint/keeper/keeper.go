@@ -91,9 +91,6 @@ func (k Keeper) StakingTokenSupply(ctx sdk.Context) math.Int {
 func (k Keeper) CirculatingRatio(ctx sdk.Context) sdk.Dec {
 	circulatingSupply := k.stakingKeeper.StakingTokenCirculatingSupply(ctx)
 	totalSupply := k.stakingKeeper.StakingTokenSupply(ctx)
-	ctx.Logger().Info("circulatingRaio",
-		"circulatingSupply", circulatingSupply,
-		"totalSupply", totalSupply)
 	if circulatingSupply.IsPositive() {
 		return sdk.NewDecFromInt(circulatingSupply).QuoInt(totalSupply)
 	}
