@@ -88,15 +88,14 @@ func (k Keeper) StakingTokenSupply(ctx sdk.Context) math.Int {
 	return k.stakingKeeper.StakingTokenSupply(ctx)
 }
 
-func (k Keeper) StakingTokenCirculatingSupply(ctx sdk.Context) math.Int {
-	return k.stakingKeeper.StakingTokenCirculatingSupply(ctx)
-}
-
 func (k Keeper) CirculatingRatio(ctx sdk.Context) sdk.Dec {
-	num := k.stakingKeeper.StakingTokenCirculatingSupply(ctx)
-	den := k.stakingKeeper.StakingTokenSupply(ctx)
-	if num.IsPositive() {
-		return sdk.NewDecFromInt(num).QuoInt(den)
+	circulatingSupply := k.stakingKeeper.StakingTokenCirculatingSupply(ctx)
+	totalSupply := k.stakingKeeper.StakingTokenSupply(ctx)
+	ctx.Logger().Info("circulatingRaio",
+		"circulatingSupply", circulatingSupply,
+		"totalSupply", totalSupply)
+	if circulatingSupply.IsPositive() {
+		return sdk.NewDecFromInt(circulatingSupply).QuoInt(totalSupply)
 	}
 	return sdk.ZeroDec()
 }
