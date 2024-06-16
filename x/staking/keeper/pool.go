@@ -79,6 +79,10 @@ func (k Keeper) StakingTokenCirculatingSupply(ctx sdk.Context) math.Int {
 			if coin.Denom == k.BondDenom(ctx) {
 				totalLocked = totalLocked.Add(coin.Amount)
 				break
+			} else {
+				ctx.Logger().With("module", "x/staking").Info("non-staking token",
+					"acc", vestingAcc,
+					"coin", coin)
 			}
 		}
 		return false
