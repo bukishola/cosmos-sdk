@@ -1,6 +1,7 @@
 module cosmossdk.io/store/v2
 
 go 1.21
+toolchain go1.23.7
 
 require (
 	cosmossdk.io/core v0.12.0
@@ -20,7 +21,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/syndtr/goleveldb v1.0.1-0.20220721030215-126854af5e6d
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
-	golang.org/x/sync v0.6.0
+	golang.org/x/sync v0.12.0
 )
 
 require (
