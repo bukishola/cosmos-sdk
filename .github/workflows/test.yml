@@ -17,7 +17,7 @@ jobs:
   split-test-files:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -51,7 +51,7 @@ jobs:
       matrix:
         part: ["00", "01", "02", "03"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -85,7 +85,7 @@ jobs:
   test-integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -116,7 +116,7 @@ jobs:
   test-e2e:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [tests, test-integration, test-e2e]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: technote-space/get-diff-action@v6.1.2
         id: git_diff
         with:
@@ -194,7 +194,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -224,7 +224,7 @@ jobs:
   test-sim-nondeterminism:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -257,7 +257,7 @@ jobs:
   test-clientv2:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -288,7 +288,7 @@ jobs:
   test-core:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.20"
@@ -319,7 +319,7 @@ jobs:
   test-depinject:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.20"
@@ -348,7 +348,7 @@ jobs:
   test-errors:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.20"
@@ -379,7 +379,7 @@ jobs:
   test-math:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.20"
@@ -410,7 +410,7 @@ jobs:
   test-simapp:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -446,7 +446,7 @@ jobs:
   test-collections:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -477,7 +477,7 @@ jobs:
   test-orm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.20"
@@ -508,7 +508,7 @@ jobs:
   test-cosmovisor:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -539,7 +539,7 @@ jobs:
   test-confix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -570,7 +570,7 @@ jobs:
   test-hubl:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -601,7 +601,7 @@ jobs:
   test-store:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: actions/setup-go@v5
@@ -634,7 +634,7 @@ jobs:
   test-log:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.20"
@@ -672,7 +672,7 @@ jobs:
   test-x-accounts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -703,7 +703,7 @@ jobs:
   test-x-tx:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -734,7 +734,7 @@ jobs:
   test-x-nft:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -765,7 +765,7 @@ jobs:
   test-x-circuit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -796,7 +796,7 @@ jobs:
   test-x-distribution:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -827,7 +827,7 @@ jobs:
   test-x-protocolpool:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -858,7 +858,7 @@ jobs:
   test-x-feegrant:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -889,7 +889,7 @@ jobs:
   test-x-evidence:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -919,7 +919,7 @@ jobs:
   test-x-params:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -949,7 +949,7 @@ jobs:
   test-x-upgrade:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -979,7 +979,7 @@ jobs:
   test-x-group:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -1009,7 +1009,7 @@ jobs:
   test-x-gov:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -1040,7 +1040,7 @@ jobs:
   test-x-slashing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -1071,7 +1071,7 @@ jobs:
   test-x-staking:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -1102,7 +1102,7 @@ jobs:
   test-x-auth:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -1133,7 +1133,7 @@ jobs:
   test-x-authz:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -1164,7 +1164,7 @@ jobs:
   test-x-bank:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
@@ -1195,7 +1195,7 @@ jobs:
   test-x-mint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
